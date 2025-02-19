@@ -1,0 +1,39 @@
+{
+  "name": "roman-numeral-converter-ui",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:selenium": "mocha ./__tests__/selenium/*.js"
+  },
+  "dependencies": {
+    "@adobe/react-spectrum": "^3.39.0",
+    "axios": "^1.7.9",
+    "next": "15.1.7",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "web-vitals": "^4.2.4",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "ts-node": "^10.9.2",
+    "chai": "^5.2.0",
+    "chromedriver": "^133.0.1",
+    "geckodriver": "^5.0.0",
+    "mocha": "^11.1.0",
+    "selenium-webdriver": "^4.28.1"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.7"
+  }
+}
