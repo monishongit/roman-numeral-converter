@@ -109,7 +109,7 @@ npm run test:coverage
 
 ### Frontend Setup (`roman-numeral-converter-ui`)
 
-Navigate to the backend directory:
+Navigate to the ui directory:
 ```sh
 cd <base-dir>/roman-numeral-converter/roman-numeral-converter-ui
 ```
