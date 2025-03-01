@@ -4,6 +4,9 @@ import React, { useContext, useState, useEffect } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 import { Provider as SpectrumProvider, defaultTheme, darkTheme } from "@adobe/react-spectrum";
 
+/**
+ * Provides theme context to the application using Adobe Spectrum.
+ */
 const ThemeProvider = ({ children }) => {
   const { theme } = useContext(ThemeContext) || { theme: "light" };
   const [mounted, setMounted] = useState(false);

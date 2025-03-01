@@ -7,6 +7,10 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_RNC_API_BASE_URL
 
 export const ThemeContext = createContext();
 
+/**
+ * Provides a theme context for this application. It persists user preferences
+ *  in localStorage and logs theme changes to the backend API for monitoring.
+ */
 export const ThemeProviderWrapper = ({ children }) => {
   const [theme, setTheme] = useState(() => {
     if (typeof window !== "undefined") {

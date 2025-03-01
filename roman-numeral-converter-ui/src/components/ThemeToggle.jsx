@@ -4,6 +4,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 import { View, Switch } from "@adobe/react-spectrum";
 
+/**
+ * Theme toggle switches that allows users to switch between light and dark modes.
+ */
 const ThemeToggle = () => {
   const { theme, setTheme } = useContext(ThemeContext);
   const [mounted, setMounted] = useState(false);

@@ -2,11 +2,14 @@
 
 import React, { useState } from "react";
 import axios from "axios";
-import { TextField, Button, View, Heading, Flex, Content, Divider } from "@adobe/react-spectrum";
+import { TextField, Button, View, Heading, Flex, Content } from "@adobe/react-spectrum";
 
 // Get base URL for RNC (Roman Numeral Converter) API
 const API_BASE_URL = process.env.NEXT_PUBLIC_RNC_API_BASE_URL
 
+/**
+ * Handles client side input validations and calls the necessary backend API.
+ */
 const ConverterForm = () => {
   const [number, setNumber] = useState("");
   const [result, setResult] = useState(null);
