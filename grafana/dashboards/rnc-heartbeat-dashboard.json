@@ -1,0 +1,59 @@
+{
+    "id": null,
+    "uid": "rnc-heartbeat-dashboard",
+    "title": "RNC Heartbeat Dashboard",
+    "tags": ["heartbeat", "monitoring", "availability"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 1,
+    "panels": [
+        {
+            "type": "stat",
+            "title": "API Heartbeat",
+            "gridPos": { "x": 2, "y": 0, "w": 15, "h": 10 },
+            "targets": [
+                {
+                    "expr": "up{job='api_alive'}",
+                    "legendFormat": "API Status",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "none",
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            { "color": "red", "value": 0 },
+                            { "color": "green", "value": 1 }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "type": "stat",
+            "title": "UI Heartbeat",
+            "gridPos": { "x": 2, "y":10, "w": 15, "h": 10 },
+            "targets": [
+                {
+                    "expr": "up{job='ui_alive'}",
+                    "legendFormat": "UI Status",
+                    "refId": "B"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "none",
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            { "color": "red", "value": 0 },
+                            { "color": "green", "value": 1 }
+                        ]
+                    }
+                }
+            }
+        }
+    ]
+}

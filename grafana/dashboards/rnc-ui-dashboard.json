@@ -1,0 +1,94 @@
+{
+  "id": null,
+  "uid": "rnc-ui-dashboard",
+  "title": "RNC UI Dashboard",
+  "tags": ["frontend", "web-vitals"],
+  "timezone": "browser",
+  "schemaVersion": 16,
+  "version": 2,
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "First Input Delay (FID)",
+      "gridPos": { "x": 0, "y": 0, "w": 7, "h": 10 },
+      "targets": [
+        {
+          "expr": "web_vitals{metric_name=\"FID\"}",
+          "legendFormat": "FID"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": 100 },
+              { "color": "yellow", "value": 300 },
+              { "color": "red", "value": 500 }
+            ]
+          }
+        }
+      }
+    },
+    {
+        "type": "timeseries",
+        "title": "Interaction to Next Paint (INP)",
+        "gridPos": { "x": 7, "y": 0, "w": 7, "h": 10 },
+        "targets": [{ "expr": "avg_over_time(web_vitals{metric_name=\"INP\"}[5m])", "legendFormat": "INP" }],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ms",
+            "min": 0,
+            "color": {
+              "mode": "continuous-blues"
+            }
+          }
+        }
+    },
+    {
+      "type": "timeseries",
+      "title": "Time to First Byte (TTFB)",
+      "gridPos": { "x": 14, "y": 0, "w": 7, "h": 10 },
+      "targets": [{ "expr": "avg_over_time(web_vitals{metric_name=\"TTFB\"}[5m])", "legendFormat": "TTFB" }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "min": 0,
+          "color": {
+            "mode": "continuous-RdYlGr"
+          }
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Cumulative Theme Change Count",
+      "gridPos": { "x": 2, "y": 10, "w": 17, "h": 10 },
+      "targets": [
+        {
+          "expr": "increase(theme_changes_total[5m])",
+          "legendFormat": "{{theme}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "value": 0, "color": "blue" },
+              { "value": 10, "color": "yellow" },
+              { "value": 50, "color": "red" }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

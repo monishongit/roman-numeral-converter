@@ -1,0 +1,69 @@
+{
+    "id": null,
+    "uid": "rnc-api-dashboard",
+    "title": "RNC API Dashboard",
+    "tags": ["backend", "nodejs", "performance"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 4,
+    "panels": [
+        {
+            "type": "timeseries",
+            "title": "HTTP Requests Count",
+            "gridPos": { "x": 3, "y": 0, "w": 15, "h": 10 },
+            "targets": [
+                {
+                    "expr": "sum by (method) (rate(http_requests_total{method=~\"$method\"}[5m]))",
+                    "legendFormat": "{{ method }}",
+                    "refId": "A"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "reqps", 
+                    "color": { "mode": "palette-classic" }
+                }
+            }
+        },
+        {
+            "type": "timeseries",
+            "title": "HTTP Request Duration",
+            "gridPos": { "x": 3, "y": 10, "w": 15, "h": 10 },
+            "targets": [
+                {
+                    "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{method=~\"$method\"}[5m])) by (le, method))",
+                    "legendFormat": "95th Pctl - {{ method }}", 
+                    "refId": "B"
+                },
+                {
+                    "expr": "histogram_quantile(0.50, sum(rate(http_request_duration_seconds_bucket{method=~\"$method\"}[5m])) by (le, method))",
+                    "legendFormat": "50th Pctl - {{ method }}",  
+                    "refId": "C"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "s",
+                    "color": { "mode": "palette-classic" }
+                }
+            }
+        }
+    ],
+    "templating": {
+        "list": [
+            {
+                "type": "query",
+                "name": "method",
+                "label": "HTTP Method",
+                "datasource": "Prometheus",
+                "query": "label_values(http_requests_total, method)",
+                "includeAll": true,
+                "multi": true,
+                "current": {
+                    "text": "All",
+                    "value": ".*"  
+                }
+            }
+        ]
+    }
+}
