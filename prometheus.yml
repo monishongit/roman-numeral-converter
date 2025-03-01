@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 15s # Scrape every 15 seconds
+
+scrape_configs:
+  - job_name: "cadvisor"
+    static_configs:
+      - targets: ["cadvisor:8080"]
+
+  - job_name: "api_metrics"
+    metrics_path: /metrics/romannumeral
+    static_configs:
+      - targets: ["roman-numeral-converter-backend-1:8081"]
+
+  - job_name: "api_alive"
+    metrics_path: /metrics/romannumeral/alive
+    static_configs:
+      - targets: ["roman-numeral-converter-backend-1:8081"]
+
+  - job_name: "ui_alive"
+    metrics_path: /metrics/romannumeral/alive
+    static_configs:
+      - targets: ["roman-numeral-converter-frontend-1:3000"]

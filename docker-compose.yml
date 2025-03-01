@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./roman-numeral-converter-api
+    env_file:
+      - ./roman-numeral-converter-api/.env
+    ports:
+      - "8081:8081"
+
+  frontend:
+    build:
+      context: ./roman-numeral-converter-ui
+    env_file:
+      - ./roman-numeral-converter-ui/.env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  backend-tests:
+    build:
+      context: ./roman-numeral-converter-api
+    command: ["npm", "run", "test"]
+    depends_on:
+      - backend
+    profiles:
+      - dev  # Runs only in development mode
+
+  frontend-tests:
+    build:
+      context: ./roman-numeral-converter-ui
+    command: ["npm", "run", "test"]
+    depends_on:
+      - frontend
+    profiles:
+      - dev  # Runs only in development mode
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/:/rootfs:ro"
+      - "/var/lib/docker/:/var/lib/docker:ro"
+      - "/sys:/sys:ro"
+      - "/etc/machine-id:/etc/machine-id:ro"
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3002:3000" # Change the exposed host port if needed
+    volumes:
+      - ./grafana/provisioning/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - ./grafana/provisioning/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    depends_on:
+      - prometheus
