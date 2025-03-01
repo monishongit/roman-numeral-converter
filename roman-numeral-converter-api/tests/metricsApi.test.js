@@ -65,4 +65,28 @@ describe('Roman Numeral API Tests', () => {
 
             expect(response.status).toBe(404);
     });
+
+    test('should return Prometheus theme metrics', async () => {
+        const response = await request(app).get('/metrics/romannumeral');
+
+        expect(response.status).toBe(200);
+        expect(response.headers['content-type']).toContain('text/plain');
+        expect(response.text).toMatch(/theme_changes_total/);
+    });
+
+    test('should return Prometheus web vital metrics', async () => {
+        const response = await request(app).get('/metrics/romannumeral');
+
+        expect(response.status).toBe(200);
+        expect(response.headers['content-type']).toContain('text/plain');
+        expect(response.text).toMatch(/web_vitals gauge/);
+    });
+
+    test('should return Prometheus is alive metrics', async () => {
+        const response = await request(app).get('/metrics/romannumeral/alive');
+
+        expect(response.status).toBe(200);
+        expect(response.headers['content-type']).toContain('text/plain');
+        expect(response.text).toContain('rnc_api_health_status 1');
+    });
 });

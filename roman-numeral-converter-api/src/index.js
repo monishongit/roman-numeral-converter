@@ -4,10 +4,11 @@ const fs = require('fs');
 const path = require('path');
 const romanRoutes = require('./routes/romanRoutes');
 const cors = require('cors');
+const { httpRequestDuration, trackRequest } = require("./utils/prometheus");
 
 const app = express();
 const RNC_API_BASE_URL = process.env.RNC_API_BASE_URL || 'localhost';
-const RNC_API_PORT = process.env.RNC_API_PORT || 8080;
+const RNC_API_PORT = process.env.RNC_API_PORT || 8081;
 const RNC_UI_BASE_URL = process.env.RNC_UI_BASE_URL || 'localhost';
 const RNC_UI_PORT = process.env.RNC_UI_PORT || 3000;
 
@@ -22,7 +23,30 @@ const accessLogStream = fs.createWriteStream(path.join(logDir, 'access.log'), { 
 const errorLogStream = fs.createWriteStream(path.join(logDir, 'error.log'), { flags: 'a' });
 
 // Middleware: Logging HTTP requests using morgan
-app.use(morgan('combined', { stream: accessLogStream }));
+app.use(morgan('combined', {
+    stream: accessLogStream,
+    skip: (req, res) => {
+        const start = process.hrtime();
+        // Track request count metric 
+        trackRequest(req.method, req.path, res.statusCode);
+
+        const logRequestDuration = () => {
+            const duration = process.hrtime(start);
+            const durationInSeconds = duration[0] + duration[1] / 1e9;
+            if (!isNaN(durationInSeconds) && durationInSeconds > 0) {
+                httpRequestDuration.observe({
+                    method: req.method,
+                    route: req.path,
+                    status: res.statusCode
+                }, durationInSeconds);
+            } else {
+                console.error(`Invalid duration recorded: ${durationInSeconds}`);
+            }
+        };
+        res.on('close', logRequestDuration);
+        return false;
+    }
+}));
 
 // Middleware: Parse incoming JSON payloads
 app.use(express.json());
